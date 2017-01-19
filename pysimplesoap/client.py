@@ -33,8 +33,8 @@ from .simplexml import SimpleXMLElement, TYPE_MAP, REVERSE_TYPE_MAP, Struct
 from .transport import get_http_wrapper, set_http_wrapper, get_Http
 # Utility functions used throughout wsdl_parse, moved aside for readability
 from .helpers import Alias, fetch, sort_dict, make_key, process_element, \
-                     postprocess_element, get_message, preprocess_schema, \
-                     get_local_name, get_namespace_prefix, TYPE_MAP, urlsplit
+    postprocess_element, get_message, preprocess_schema, \
+    get_local_name, get_namespace_prefix, TYPE_MAP, urlsplit
 from .wsse import UsernameToken
 
 log = logging.getLogger(__name__)
@@ -192,7 +192,7 @@ class SoapClient(object):
                                 soap_ns=self.__soap_ns,     # soap prefix & uri
                                 soap_uri=soap_uri)
         request = SimpleXMLElement(xml, namespace=self.__ns and self.namespace,
-                                        prefix=self.__ns)
+                                   prefix=self.__ns)
 
         request_headers = kwargs.pop('headers', None)
 
@@ -250,7 +250,7 @@ class SoapClient(object):
         # do pre-processing using plugins (i.e. WSSE signing)
         for plugin in self.plugins:
             plugin.preprocess(self, request, method, args, kwargs,
-                                    self.__headers, soap_uri)
+                              self.__headers, soap_uri)
 
         self.xml_request = request.as_xml()
         self.xml_response = self.send(method, self.xml_request)
@@ -278,7 +278,7 @@ class SoapClient(object):
         # do post-processing using plugins (i.e. WSSE signature verification)
         for plugin in self.plugins:
             plugin.postprocess(self, response, method, args, kwargs,
-                                     self.__headers, soap_uri)
+                               self.__headers, soap_uri)
 
         return response
 
@@ -422,8 +422,8 @@ class SoapClient(object):
             else:
                 # use the message (element) name
                 method = inputname
-        #elif not input:
-            #TODO: no message! (see wsmtxca.dummy)
+                #elif not input:
+                #TODO: no message! (see wsmtxca.dummy)
         else:
             params = kwargs and kwargs.items()
 
@@ -481,9 +481,9 @@ class SoapClient(object):
                         warnings.append('Parameter key %s not in args. parameter: %s, value: %s' % (key, struct, value))
             elif struct and not value:
                 warnings.append('parameter keys not in args. parameter: %s, args: %s' % (struct, value))
-            elif not struct and value:
-                valid = False
-                errors.append('Args keys not in parameter. parameter: %s, args: %s' % (struct, value))
+            # elif not struct and value:
+            #     valid = False
+            #     errors.append('Args keys not in parameter. parameter: %s, args: %s' % (struct, value))
             else:
                 pass
         elif isinstance(struct, list):
@@ -818,7 +818,7 @@ class SoapClient(object):
         # create an default service if none is given in the wsdl:
         if not services:
             services[''] = {'ports': {'': None}}
-   
+
         elements = list(e for e in elements.values() if type(e) is type) + sorted(e for e in elements.values() if not(type(e) is type))
         e = None
         self.elements = []
@@ -936,7 +936,7 @@ class SoapClient(object):
                     s += '\n     %s(%s)' % (
                         operation['name'],
                         input_str[:-2]
-                        )
+                    )
                     s += '\n      > %s' % output
 
         return s
